@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="to-do list">
+    <meta name="author" content="">
+	<title>Notes</title>
+<script type="text/javascript" src="../js/jquery-3.0.0.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../css/notesStyle.css"> 
+</head>
+<body>
+<div class="wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 headerForm">
+                <div class="col-md-offset-1 col-md-10">
+                    <h4 class="headerText pull-left">Notes tutorial app</h4>
+                    <div class="pull-right hidden" id="divFormReg">
+                    <form class="form-inline  formReg" role="form" id="entrance">
+                        <div class="form-group" id="divUsername">
+                            <label class="sr-only" for="username">Username</label>
+                            <input type="text" class="form-control input-sm" id="username" name="username" placeholder="Username">
+                        </div>
+                        <div class="form-group" id="divPassword">
+                            <label class="sr-only" for="password">Password</label>
+                            <input type="password" class="form-control input-sm" id="password" name="password" placeholder="Password">
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success" id="signIn">Sign in</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#regModal">Register</button>
+                    </form>
+                    </div>
+                    <div class="pull-right" id="divCabUser">
+                        <span class="span1CabUser">User:   </span><span class="span2CabUser" id="cabUser"></span>
+                        <button type="button" class="btn btn-xs" id="changeUser">Change user</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 afterHeaderForm">
+                <div class="col-md-offset-1 col-md-10">
+                    <h2><i class="glyphicon glyphicon-edit"></i> Keep your notes in order</h2>
+                    <h4>A simple application to keep your own notes in order.</h4>
+                </div>
+            </div><br>
+            <div class="col-md-12">
+                <div class="col-md-offset-1 col-md-6">
+                    <div class="panel panel-default addNote">
+                        <div class="panel-heading">Add your note to section</div>
+                        <div class="panel-body" hidden="hidden" id="bodyAddNote">
+                            <form class="form-horizontal" role="form" id="addNoteForm">
+                                <fieldset id="fieldsetAddNote">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <textarea class="form-control" id="postNote" rows="7" maxlength="500"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-primary btn-sm" id="btnPostNote" disabled>Post note</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Поле для добавления новых записей -->
+                    <div class="panel panel-default addNote">
+                        <div class="panel-heading">Notes</div>
+                        <div class="panel-body hide" id="panelBodyShowNotes">
+                            <table class="table table-condensed">
+                                <tbody id="tableNotes"></tbody>                         
+                            </table>
+                        </div>
+                        <div class="col-md-12 text-center addNote hide" id="loadNotes"><img src="load.gif" class="img-fluid" alt="Load"></div>
+                    </div>    
+                </div>
+                <!-- Поле добавления новой секций + фильтр -->
+                <div class="col-md-4 col-sm-4">
+                    <form class="addNote">
+                        <fieldset id="fieldsetAddSection" disabled>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control input-sm" id="newSection" maxlength="35" placeholder="New section name">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-sm" type="button" id="addNewSection">Add</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <form class="addNote">
+                        <fieldset id="fieldsetFilterSection" disabled>   
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-sm" id="inputFilterSection" placeholder="Section filter">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-condensed .tableSection" >
+                                <tbody id="tableSections"></tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12 text-center hide" id="loadSection"><img src="load.gif" class="img-fluid" alt="Load"></div>
+                    </div>                                      
+                </div>
+            </div>    
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="regModal" role="dialog">
+    <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">New user registration</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" role="form" id="regModalForm">
+                <div class="form-group">
+                    <label for="userReg" class="col-md-4 control-label">User</label>
+                    <div class="col-md-8 form-group">
+                        <input type="text" class="form-control formRegInput" id="userReg" name="userReg" placeholder="Username">
+                        <span class="spanFeedbackInput"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="passwordReg" class="col-md-4 control-label">Password</label>
+                    <div class="col-md-8 form-group">
+                        <input type="password" class="form-control formRegInput" id="passwordReg" name="passwordReg" placeholder="Password">
+                        <span class="spanFeedbackInput"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="PasswordConfirmReg" class="col-md-4 control-label">Confirm Password</label>
+                    <div class="col-md-8 form-group">
+                        <input type="password" class="form-control formRegInput" id="PasswordConfirmReg" name="passwordReg" placeholder="Confirm password">
+                        <span class="spanFeedbackInput"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="registrationNewUser">Registration</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+      
+    </div>
+</div>
+
+<!-- Modal feedback-->
+<div class="modal fade" id="feedbackModal" role="dialog">
+    <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id="feedbackModalContent">
+        </div>  
+    </div>
+    </div>
+</div>
+
+
+<!-- JS -->
+<script>
+var variable;
+var user;
+var section;
+
+if (sessionStorage.user) {
+    $('#cabUser').text(sessionStorage.user);
+    user = sessionStorage.id 
+    $('#fieldsetAddSection').prop('disabled', false); 
+    $('#fieldsetFilterSection').prop('disabled', false);
+    showSectionsUser(user); 
+}
+    else {
+        $('#divFormReg').removeClass('hidden');
+        $('#divCabUser').addClass('hidden');   
+        $('#fieldsetAddSection').prop('disabled', true); 
+        $('#fieldsetFilterSection').prop('disabled', true);
+    }
+
+
+$(document).keypress(function(e){
+  if (e.keyCode == 13) {
+    if ($('button').is(":focus")){
+        return true;
+    }
+    e.preventDefault();
+    if ($('#password').is(":focus")) {      
+          $("input:focus").parent().next().click();
+    }
+        if ($('#newSection').is(":focus")) {      
+          $("input:focus").next().children().click();
+        }
+  }
+
+});
+
+$('#signIn').click(function(e) {
+  e.preventDefault();
+    if($('#username').val() == '' || $('#password').val() == ''){ 
+        $("#divUsername, #divPassword").fadeTo("fast",.50).fadeTo("fast", 1).fadeTo("fast",.50).fadeTo("fast", 1);    
+    }
+        else 
+            {
+                data = $('#entrance').serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: 'login.php',
+                    data: data,
+                    success: function (data) {
+                        var result = jQuery.parseJSON(data); 
+                        if(result.message){
+                            if (result.message == '1') {
+                                $("#divUsername, #divPassword").fadeTo("fast",.50).fadeTo("fast", 1).fadeTo("fast",.50).fadeTo("fast", 1); 
+                                $('#username, #password').val(''); 
+                            }
+                            if (result.message == '2') {
+                                $("#divPassword").fadeTo("fast",.50).fadeTo("fast", 1).fadeTo("fast",.50).fadeTo("fast", 1);
+                                $('#password').val(''); 
+                                            }
+                        }
+                        else {
+                            $('#divFormReg').hide();
+                            $('#cabUser').text(result.user);
+                            sessionStorage.user = result.user;
+                            sessionStorage.id = result.id;
+                            $('#divCabUser').removeClass('hidden');
+                            user = result.id;   
+                            $('#fieldsetAddSection').prop('disabled', false); 
+                            $('#fieldsetFilterSection').prop('disabled', false);
+                            showSectionsUser(user);                       
+                        }
+                    },
+                    error:  function(xhr, str){
+                        alert('Возникла ошибка: ' + xhr.responseCode);
+                        }
+                });
+            }
+}); 
+
+/**/
+
+/*-------------------------User exit------------------*/
+$('#changeUser').click(function(e){
+  e.preventDefault();
+    $('#divCabUser').addClass('hidden');
+    $('#divFormReg').removeClass('hidden');
+    $('#entrance')[0].reset();
+    $('#divFormReg').show();
+    user = '';
+    section = '';
+    $('#btnPostNote').prop('disabled', true);
+    $('#fieldsetAddSection').prop('disabled', true); 
+    $('#fieldsetFilterSection').prop('disabled', true);
+    $("#tableSections tr").remove();
+    $("#tableNotes tr").remove();
+    $('#panelBodyShowNotes').addClass('hide');
+    $('#newSection').val('');
+    $('#inputFilterSection').val('');
+    $('#postNote').val('');
+    $('#bodyAddNote').slideUp();
+    removeErrorFeedback($('#newSection'));
+    removeErrorFeedback($('#postNote'));
+    sessionStorage.user = '';
+    sessionStorage.id = '';
+});
+/*----------------------------------------------------*/
+
+/*-------------New user registration------------------*/
+$('#registrationNewUser').click(function(e){
+  $(this).attr('disabled',true);
+  e.preventDefault();
+    variable = true;
+    $('#regModalForm').find(':input').not(':button').each(function(){
+      validation(this);
+    });
+
+    if(variable == true){
+    let regData = $('#regModalForm').serialize();
+        $.ajax({
+            type: 'POST',
+            url: 'registration.php',
+            data: regData,
+            success: function (data) {
+                $('#feedbackModalContent').html(data);
+                $('#regModal').modal('hide');
+                $('#feedbackModal').modal('show');
+                setTimeout(function(){$('#feedbackModal').modal('hide')},3000);
+            },
+            error:  function(xhr, str){
+                alert('Возникла ошибка: ' + xhr.responseCode);
+            }
+         });
+    }
+    else{
+        $(this).attr('disabled',false);
+    }
+
+});
+/*----------------------------------------------------*/
+
+/*---------validation---------------------------------*/
+function validation(el){
+    removeErrorFeedback(el);
+    let str = $(el).val().replace(/\s+/g, '');
+
+    if(str){
+        var field = $(el).val();
+        if ($(el).attr('id') == 'newSection' || $(el).attr('id') == 'postNote') {
+            var result = field.match(/[A-Za-z0-9.,;:!?@№()+=<>'"/_-\s]+/ig);
+        }
+        else {
+            var result = field.match(/[A-Za-z0-9._-]+/ig);          /*Запись в первый элемент массива по шаблону*/
+        }
+
+        if ((result != null) && (result[0] === field)) {
+            if ($(el).attr('id') == 'userReg') {
+                let userRegCheck = $(el).val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'registration.php',
+                    data: {'checkUser': 'checkUser', 'userReg': userRegCheck},
+                    async: false,
+                    success: function (dataCheck) {
+                        if(dataCheck != ''){variable = false;
+                            $(el).parent().addClass('has-error has-feedback');  
+                            $(el).siblings('.spanFeedbackInput').addClass('glyphicon glyphicon-remove form-control-feedback');  
+                            $(el).after("<span class='after_input' style='color: #cc0000; font-size: 10px;'>"+dataCheck+"</span>");                 
+                        }
+                    },
+                    error:  function(xhr, str){
+                        alert('Возникла ошибка: ' + xhr.responseCode);
+                    }
+                });
+            }
+        }
+            else {
+                $(el).parent().addClass('has-error has-feedback');
+                variable = false; 
+                    if ($(el).attr('id') == 'newSection') {
+                        $(el).parent().after("<span class='after_input' style='color: #cc0000; font-size: 10px;'>The field contains not allowed characters!</span>");     
+                    }
+                    else {
+                        if ($(el).attr('id') == 'postNote') {
+                            $(el).after("<span class='after_input' style='color: #cc0000; font-size: 10px;'>The field contains not allowed characters!</span>"); 
+                        }
+                        else {
+                        $(el).siblings('.spanFeedbackInput').addClass('glyphicon glyphicon-remove form-control-feedback');  
+                        $(el).after("<span class='after_input' style='color: #cc0000; font-size: 10px;'>The field can contain the characters of the English alphabet and numbers!</span>");           
+                        }
+                    }   
+            }
+    }
+    else{
+        $(el).parent().addClass('has-error has-feedback'); 
+        variable = false;
+            if ($(el).attr('id') == 'newSection') {
+                $(el).parent().after("<span class='after_input' style='color: #cc0000; font-size: 10px;'>Required field!</span>"); 
+            }
+            else {
+                if (!$(el).attr('id') == 'postNote') {   
+                    $(el).siblings('.spanFeedbackInput').addClass('glyphicon glyphicon-remove form-control-feedback');
+                }  
+                $(el).after("<span class='after_input' style='color: #cc0000; font-size: 10px;'>Required field!</span>");           
+            }    
+    }
+
+    if ($(el).attr('id') == 'PasswordConfirmReg') {
+        if ($('#passwordReg').val() != $('#PasswordConfirmReg').val()) {
+            if ($('#PasswordConfirmReg').siblings().is('.after_input')) {
+                $('#PasswordConfirmReg').siblings('.after_input').text('The password does not match!');
+                variable = false;
+            }
+        else{
+            $('#PasswordConfirmReg').parent().addClass('has-error has-feedback');  
+            $('#PasswordConfirmReg').siblings('.spanFeedbackInput').addClass('glyphicon glyphicon-remove form-control-feedback');  
+            $('#PasswordConfirmReg').after("<span class='after_input' style='color: #cc0000; font-size: 10px;'>The password does not match!</span>");
+            variable = false;
+        }
+        }
+    }
+}
+/*----------------------------------------------------*/
+
+/*------------------Get focus-------------------------*/
+$('.formRegInput, #newSection, #postNote').focus(function(){
+    removeErrorFeedback(this);
+});
+/*----------------------------------------------------*/
+
+/*-------------------Reset modal form-----------------*/
+$('#regModal').on('hidden.bs.modal', function () {
+    $('#regModalForm').find(':input').not(':button').each(function(){
+        removeErrorFeedback(this);
+    });
+    $('#regModalForm')[0].reset();
+    $('#registrationNewUser').attr('disabled',false);
+});
+/*----------------------------------------------------*/
+
+/*----------------------------------------------------*/
+function removeErrorFeedback(el){
+    if ($(el).attr('id') == 'newSection') {
+        $(el).parent().removeClass('has-error has-feedback'); 
+        $(el).parent().siblings('.after_input').remove();
+    }
+    else{
+        $(el).parent().removeClass('has-error has-feedback'); 
+        $(el).siblings('.spanFeedbackInput').removeClass('glyphicon glyphicon-remove form-control-feedback');     
+        $(el).siblings('.after_input').remove();
+    }
+}
+/*----------------------------------------------------*/
+
+
+/*---------------Add new section----------------------*/
+$('#addNewSection').click(function(e){
+  e.preventDefault();  
+    let thisBtn = $(this);
+    thisBtn.attr('disabled',true);
+    variable = true;
+    validation($('#newSection'));
+
+        if (variable) {
+            $.ajax({
+                    type: 'POST',
+                    url: 'sections.php',
+                    data: {
+                        'section': $('#newSection').val(),
+                        'id_user': user    
+                    },
+                    success: function (data) {
+                        $('#tableSections').append(data);
+                        $('#newSection').val('');
+                        thisBtn.attr('disabled',false);
+                    },
+                    error:  function(xhr, str){
+                        alert('Возникла ошибка: ' + xhr.responseCode);
+                    }
+                 });
+        }
+        else{        
+            thisBtn.attr('disabled',false);
+        }
+});
+/*----------------------------------------------------*/
+
+/*----------------Delete section----------------------*/
+$('#tableSections').on('click', '.delSection', function(e){
+  e.preventDefault();
+    var thistBtn = $(this);
+    if(section == $(this).attr('id').substr(3)){
+        $("#tableNotes tr").remove();
+        $('#panelBodyShowNotes').addClass('hide');
+        $('#bodyAddNote').slideUp();
+        $('#btnPostNote').prop('disabled', true);
+        section = '';
+    }
+        $.ajax({
+                type: 'POST',
+                url: 'sections.php',
+                data: {
+                    'delSection': $(this).attr('id').substr(3)  
+                },
+                async: false,
+                success: function (data) {
+                    if (data != '') {
+                        return false;
+                    }  
+                    else{
+                        thistBtn.closest('tr').remove();
+                    }    
+                },
+                error:  function(xhr, str){
+                    alert('Возникла ошибка: ' + xhr.responseCode);
+                }
+             });
+    
+});
+/*----------------------------------------------------*/
+
+/*------------Show users sections--------------------*/
+function showSectionsUser(user){
+    $('#loadSection').removeClass('hide');
+        $.ajax({
+            type: 'POST',
+            url: 'sections.php',
+            data: {
+                'showSections': 'show',
+                'id_user': user    
+            },
+            success: function (data) {
+                $('#loadSection').addClass('hide');
+                $('#tableSections').append(data);
+            },
+            error:  function(xhr, str){
+                alert('Возникла ошибка: ' + xhr.responseCode);
+            }
+         });
+}
+/*----------------------------------------------------*/
+
+/*---------------------Show sectons notes-------------*/
+$('#tableSections').on('click', '.selectSection', function(e){
+  e.preventDefault();
+  $('#bodyAddNote').slideDown();
+    $('#btnPostNote').prop('disabled', false);
+      $('.selectSection').removeClass('btn-info');
+        $(this).addClass('btn-info');
+          section = $(this).attr('id');
+            notesAjax('', section);
+});
+/*----------------------------------------------------*/
+
+/*----------------------Add new note------------------*/
+$('#btnPostNote').click(function(e){
+  e.preventDefault();
+    $(this).attr('disabled',true);
+      let strNote = $('#postNote').val();
+       variable = true;
+         validation($('#postNote'));
+
+         if (variable) {
+            notesAjax(strNote, section, '', $(this));
+         }
+         else{
+            $(this).attr('disabled',false);
+         }
+});
+/*----------------------------------------------------*/
+
+/*--------------------Delete note---------------------*/
+$('#tableNotes').on('click', '.delNote', function(e){
+    e.preventDefault();
+      notesAjax('', '', $(this).attr('id'), $(this));
+})
+/*----------------------------------------------------*/
+
+/*----------------------------------------------------*/
+function notesAjax(strNote, idSection, delNote, thisId){
+  $('#postNote').val('');
+    if (strNote) {
+        var data = {'strNote' : strNote,
+                'idSection' : idSection}
+    }
+        if (!strNote && idSection) {
+            $('#loadNotes').removeClass('hide');
+            var data = {'showNotes' : 'show',
+                'idSection' : idSection};
+            $("#tableNotes tr").remove();
+            $('#panelBodyShowNotes').addClass('hide');
+        }
+            if (delNote) {
+                var data = {'delNote': delNote}
+            }
+                $.ajax({
+                    type: 'POST',
+                    url: 'notes.php',
+                    data: data,
+                    success: function (data) {
+                        if (!data) {
+                            $('#loadNotes').addClass('hide');
+                            return false;
+                        }
+                            if (data == 'Ok') {
+                                thisId.closest('tr').remove();
+                                let rows = $('#tableNotes').find('.table-tr-data');
+                                    if (rows.length == 0) {
+                                        $('#panelBodyShowNotes').addClass('hide');
+                                    }
+                            }
+                                else {                          
+                                    $('#tableNotes').append(data);
+                                    $('#panelBodyShowNotes').removeClass('hide');
+                                    $('#loadNotes').addClass('hide');
+                                    thisId.attr('disabled', false);
+                                }
+                    },
+                    error:  function(xhr, str){
+                        alert('Возникла ошибка: ' + xhr.responseCode);
+                    }
+                 });
+}
+/*-------------------------------------------------------*/
+
+
+/*-------------------Filter sections---------------------*/
+$('#inputFilterSection').on('input', function(){
+    var filter = $('#inputFilterSection').val();
+    var rows = $('#tableSections').find('.table-tr-data');
+        rows.each(function(){
+            var valid = true;
+                if ($(this).find('.selectSection').html().toLowerCase().indexOf(filter.toLowerCase()) == -1) {
+                    valid = false;
+                }
+            if (valid === true) {
+                $(this).css('display', '');
+            }
+            else {       
+                $(this).css('display', 'none');
+            }
+        });
+});
+/*-------------------------------------------------------*/
+</script>
+</body>
+</html>

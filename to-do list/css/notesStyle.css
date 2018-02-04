@@ -1,0 +1,51 @@
+.headerForm {
+	background-color: #1C1C1C;
+	height: 50px;
+}
+
+.headerText {
+	color: #8D8D8B;
+	line-height: 30px;
+
+}
+
+.formReg {
+	padding: 10px 0;
+}
+
+.afterHeaderForm {
+	background-color: #EEEEEE;
+	height: 150px;
+}
+
+.addNote {
+	margin: 20px 0px;
+}
+
+#divCabUser {
+	margin: 10px 0px;
+}
+
+#divCabUser > button {
+	line-height: 12px;
+}
+
+.span1CabUser {
+	color: #8D8D8B;
+	font-size: 16px;
+	line-height: 30px;
+}
+
+.span2CabUser {
+	color: white;
+	font-size: 18px;
+	line-height: 30px;
+}
+
+.section-item {
+	margin-top: : 5px;
+}
+
+
+
+
